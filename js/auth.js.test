@@ -1,0 +1,71 @@
+const RootURL = 'https://avdeenko.com:8443';
+const whoamiURL = `${RootURL}/whoami`;
+const statusURL = `${RootURL}/status`;
+const sessionsURL = `${RootURL}/private/sessions`;
+
+//let url = whoamiURL;
+let url = statusURL;
+
+// 1.
+// document.getElementById('send').onclick = send.bind(null, url);
+// document.getElementById('login').addEventListener("keyup", enterPressed.bind(null, send, url));
+// document.getElementById('password').addEventListener("keyup", enterPressed.bind(null, send, url));
+//
+// function enterPressed(callback, url, event) {
+//   if (event.which == 13 || event.keyCode == 13) {
+//     event.preventDefault();
+//     callback(url);
+//   }
+// }
+
+//2.
+// document.getElementById('send').onclick = send.bind(null, url);
+// document.getElementById('login').addEventListener("keyup", enterPressed(send, url));
+// document.getElementById('password').addEventListener("keyup", enterPressed(send, url));
+//
+// function enterPressed(callback, url) {
+//   return function(event) {
+//     if (event.which == 13 || event.keyCode == 13) {
+//       event.preventDefault();
+//       callback(url);
+//     }
+//   }
+// }
+
+// 3.
+document.getElementById('send').onclick = get.bind(null, url);
+document.getElementById('login').addEventListener("keyup", () => IfEnterPressed(get, url));
+document.getElementById('password').addEventListener("keyup", () => IfEnterPressed(get, url));
+
+function IfEnterPressed(callback, url) {
+  if (event.which == 13 || event.keyCode == 13) {
+    event.preventDefault();
+    callback(url);
+  }
+}
+
+async function get(url) {
+
+  if (!validateData()) return;
+
+  const opt = {
+    method: 'GET',
+    mode: 'cors',
+    credentials: 'same-origin',
+    cache: 'no-cache',
+    //  headers: {
+    //  "Cookie": "auth_session=MTU4OTkxMjU3OHxEdi1CQkFFQ180SUFBUkFCRUFBQUhfLUNBQUVHYzNSeWFXNW5EQWtBQjNWelpYSmZhV1FFZFdsdWRBWUNBQTg9fLJPsnqGeKsOVS1WRydGkf_DyuxaVkdlKR1hPlKzJ-9p",
+    //"x-auth": "ku-ku",
+    //    "Authorization": "Basic rav:12345"
+    //  }
+  }
+
+  let response = await fetch(url, opt);
+
+  if (response.ok) {
+    let json = await response.json();
+    console.log(json);
+  } else console.log(`http error: ${response.status}`);
+}
+
+validateData = () => true;
