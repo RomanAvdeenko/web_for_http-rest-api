@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Test page</title>
+  <script type="text/javascript">
+    (() => {
+      //url = "https://avdeenko.com:8443/private/whoami"
+      url = "https://avdeenko.com:8443/status"
+      let foo = () =>
+        fetch(url)
+        .then(response => {
+          if (response.status == 200)
+            return response.json()
+          else
+            return new Error(`fetch error: ${response.status}, ${response.statusText}`)
+        })
+        .then(response => {
+          console.log(response)
+          //response.name = "Roman Avdeenko"
+          return response
+        })
+        .catch(err => console.log(`error: ${err}`))
+      //
+      foo()
+        .then(res => console.log(res))
+    })()
+  </script>
+
+</head>
+
+<body>
+
+</body>
+
+</html>

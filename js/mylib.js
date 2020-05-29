@@ -4,58 +4,69 @@
   let App = window.App || {};
 
   let MyLib = {
+    //
     post: url => {
-      if (!MyLib.validateData()) return;
+      if (!MyLib.validateData())
+        return Promise.reject(new Error("Validate error"));
 
       let request = {
         email: login.value,
         password: password.value
       }
-      fetch(url, {
+      return fetch(url, {
           method: 'POST',
           headers: {
-                      'Content-Type': 'application/json',
-            'Cache': 'no-cache'
-          },
-          credentials: 'include',
-          body: JSON.stringify(request)
-        })
-        .then(
-          response => {
-            response.text()
-              .then(
-                msg => {
-                  if (msg) console.log(msg)
-                }
-              )
-          },
-          err => console.log(`${err}, ${err.message}`)
-        )
-    },
-    get: url => {
-      if (!MyLib.validateData()) return;
-
-
-      fetch(url, {
-          method: "GET",
-          headers: {
-            
             'Content-Type': 'application/json',
             'Cache': 'no-cache'
           },
-          credentials: 'include'
+          credentials: 'include',
+          cache: 'no-cache',
+          body: JSON.stringify(request)
         })
-        .then(
-          response => {
-            response.json()
-              .then(json => console.log(json))
-          },
-          err => console.log(`${err}, ${err.message}`)
-        )
+        .then(response => {
+          console.log(`response status ${response.status}`)
+          if (response.status == 200)
+            return response.json()
+          else
+            return new Error(`fetch error: ${response.status}, ${response.statusText}`)
+        })
+        .then(response => {
+          console.log(response)
+          return response
+        })
+        .catch(err => console.log(`error: ${err}`))
     },
+
+    get: url => {
+      if (!MyLib.validateData())
+        return Promise.reject(new Error("Validate error"));
+      return fetch(url, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache': 'no-cache'
+          },
+          credentials: 'include',
+          cache: 'no-cache',
+        })
+        .then(response => {
+          console.log(`response status ${response.status}`)
+          if (response.status == 200)
+            return response.json()
+          else
+            return new Error(`fetch error: ${response.status}, ${response.statusText}`)
+        })
+        .then(response => {
+          console.log(response)
+          return response
+        })
+        .catch(err => console.log(`error: ${err}`))
+    },
+
     validateData: function() {
       return true;
-    }
+    },
+
   }
 
   App.MyLib = MyLib;

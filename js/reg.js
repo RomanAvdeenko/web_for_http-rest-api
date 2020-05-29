@@ -3,7 +3,7 @@
 
   let MyLib = window.App.MyLib;
 
-  let url = authenticateURL;
+  let url = registrateURL;
 
   let login = document.getElementById('login');
   let password = document.getElementById('password');
